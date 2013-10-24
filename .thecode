@@ -1,0 +1,321 @@
+#include <iostream>
+#include <string>
+#include <map>
+using namespace std;
+
+struct attrib
+{
+    int atr_str;
+    int atr_int;
+    int atr_wlp;
+    int atr_agl;
+    int atr_dxt;
+    int atr_chr;
+};
+
+enum eq_slot
+{
+    eq_dummy,
+    eq_wpn1,
+    eq_wpn2,
+    eq_shld,
+    eq_hlm,
+    eq_clth1,
+    eq_clth2,
+    eq_ndrwr,
+    eq_arm_tors,
+    eq_arm_lgs,
+    eq_boots,
+    eq_ggntlet,
+    eq_clk,
+    eq_arrow,
+    eq_neck
+};
+
+enum w_type
+{
+        blunt,
+        ranged,
+        piercing,
+        slashing
+};
+
+enum a_type
+{
+    t_none,
+    cloth,
+    light_armour,
+    heavy_armour
+};
+
+enum element
+{
+    m_none,
+    m_fire,
+    m_water,
+    m_ice,
+    m_air,
+    m_thunder,
+    m_earth,
+    m_light,
+    m_dark
+};
+
+enum material
+{
+    a_none,
+    a_wood,
+    a_iron,
+    a_steel,
+    a_dwarven,
+    a_leather
+};
+
+class wpn{
+private:
+    string w_display_name;
+    float w_minatk;
+    float w_maxatk;
+    float w_cond;
+    float w_cost;
+    material w_mat;
+    element w_elem;
+    w_type w_usage;
+public:
+    wpn(string w_setname, int w_setmin, int w_setmax, int w_setcond, int w_setcost, material w_setmat, element w_setelem, w_type w_settype)
+        {
+        w_display_name = w_setname;
+        w_minatk = w_setmin;
+        w_maxatk = w_setmax;
+        w_cond = w_setcond;
+        w_cost = w_setcost;
+        w_mat = w_setmat;
+        w_elem = w_setelem;
+        w_usage = w_settype;
+        };
+    static wpn GetNull()
+    {
+        string w_setname = "N\\A";
+        int w_setmin = 0;
+        int w_setmax = 0;
+        int w_setcond = 0;
+        int w_setcost = 0;
+        material w_setmat = a_none;
+        element w_setelem = m_none;
+        w_type w_settype = blunt;
+     };
+    string GetW_display_name() { return w_display_name; }
+    float GetW_minatk() { return w_minatk; }
+    float GetW_maxatk() { return w_maxatk; }
+    float GetW_cond() { return w_cond; }
+    float GetW_cost() { return w_cost; }
+    material GetW_mat() { return w_mat; }
+    element GetW_elem() { return w_elem; }
+    w_type getW_usage() { return w_usage; }
+};
+
+
+class armour{
+private:
+    string a_display_name;
+    float a_defense;
+    float a_cond;
+    float a_cost;
+    material a_mat;
+    element a_elem;
+    a_type a_wearer;
+public:
+    armour(string a_setname, int a_setvalue, int a_setcond, int a_setcost, material a_setmat, element a_setelem, a_type a_settype)
+        {
+        a_display_name = a_setname;
+        a_defense = a_setvalue;
+        a_cond = a_setcond;
+        a_cost = a_setcost;
+        a_mat = a_setmat;
+        a_elem = a_setelem;
+        a_wearer = a_settype;
+        }
+    static armour GetNull()
+    {
+        string a_setname = "N\\A";
+        int a_setvalue = 0;
+        int a_setcond = 0;
+        int a_setcost = 0;
+        material a_setmat = a_none;
+        element a_setelem = m_none;
+        a_type a_settype = t_none;
+    };
+    string GetA_display_name() { return a_display_name; }
+    float GetA_defense() { return a_defense; }
+    float GetA_cond() { return a_cond; }
+    float GetA_cost() { return a_cost; }
+    material GetA_mat() { return a_mat; }
+    element GetA_elem() { return a_elem; }
+    a_type getA_wearer() { return a_wearer; }
+};
+
+
+enum sex
+{
+        male,
+        female
+};
+
+enum race1
+    {
+        r_human,
+        r_wood_elf,
+        r_high_elf,
+        r_dark_elf,
+        r_orc,
+        r_dwarf,
+        r_gnome,
+        r_halfling,
+        r_lizardman,
+        r_ogre,
+        r_goblin
+    };
+enum race2
+{
+        r_none,
+        r_vampire,
+        r_lich,
+        r_werewolf,
+        r_werelion,
+        r_werebear,
+        r_wereboar,
+        r_weretiger,
+        r_wererat
+};
+
+enum char_class
+{
+        c_none,
+        c_druid,
+        c_priest,
+        c_magician,
+        c_warrior
+};
+
+enum pclass
+{
+        pc_none,
+        pc_knight,
+        pc_dknight,
+        pc_ranger,
+        pc_assassin,
+        pc_inquisitor,
+        pc_necromancer,
+        pc_headhunter
+};
+
+
+class chr{
+private:
+    string display_name;
+    race1 race;
+    race2 sec_race;
+    char_class class1;
+    char_class class2;
+    pclass prestige_class;
+    int lvl;
+    attrib base_attrib;
+    attrib mod_attrib;
+    bool alive;
+    string state[30];
+    float mhp;
+    float chp;
+    float mmp;
+    float cmp;
+    float hp_lvl;
+    float mp_lvl;
+    float msta;
+    float csta;
+    float sta_lvl;
+public:
+    map<eq_slot,armour>*char_armour;
+    map<eq_slot,wpn>*char_wpn;
+    chr(string setname, race1 setrace, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
+    {
+    char_armour = new map<eq_slot,armour>();
+    char_wpn = new map<eq_slot,wpn>();
+    display_name = setname;
+    race = setrace;
+    sec_race = setrace2;
+    class1 = setclass1;
+    class2 = setclass2;
+    prestige_class = setpclass;
+    lvl = setlvl;
+    alive = true;
+    mhp = 0.00;
+    chp = 0.00;
+    mmp = 0.00;
+    cmp = 0.00;
+    hp_lvl = 0.00;
+    mp_lvl = 0.00;
+    msta = 0.00;
+    csta = 0.00;
+    sta_lvl = 0.00;
+    char_wpn->at(eq_wpn1) = wpn::GetNull();
+    char_wpn->at(eq_wpn2) = wpn::GetNull();
+    char_armour->at(eq_shld) = armour::GetNull();
+    char_armour->at(eq_hlm) = armour::GetNull();
+    char_armour->at(eq_clth1) = armour::GetNull();
+    char_armour->at(eq_clth2) = armour::GetNull();
+    char_armour->at(eq_ndrwr) = armour::GetNull();
+    char_armour->at(eq_arm_tors) = armour::GetNull();
+    char_armour->at(eq_arm_lgs) = armour::GetNull();
+    char_armour->at(eq_boots) = armour::GetNull();
+    char_armour->at(eq_ggntlet) = armour::GetNull();
+    char_armour->at(eq_clk) = armour::GetNull();
+    char_armour->at(eq_arrow) = armour::GetNull();
+    char_armour->at(eq_neck) = armour::GetNull();
+    };
+    string GetName() { return display_name; }
+    void set_name(string set_name) { display_name = set_name; }
+    race1 getrace() { return race; }
+    void set_race(race1 setrace) { race = setrace; }
+    race2 getrace2() { return sec_race; }
+    void set_race2(race2 setrace2) { sec_race = setrace2; }
+    char_class getclass1() { return class1; }
+    void set_class1(char_class setclass1) { class1 = setclass1; }
+    char_class getclass2() { return class2; }
+    void set_class2(char_class setclass2) { class2 = setclass2; }
+    pclass getpclass() { return prestige_class; }
+    void set_pclass(pclass setpclass) { prestige_class = setpclass; }
+    int getlvl() { return lvl; }
+    void set_lvl(int setlvl) { lvl = setlvl; }
+    bool get_alive() { return alive; }
+    void rfr_alive()
+    {
+    if (chp <= 0.00)
+        alive = false;
+    else
+        alive = true; }
+    float get_mhp() { return mhp; }
+    void set_mhp(float setmhp) { mhp = setmhp; }
+    float get_chp() { return chp; }
+    void set_chp(float setchp) { chp = setchp; }
+    float get_mmp() { return mmp; }
+    void set_mmp(float setmmp) { mmp = setmmp; }
+    float get_cmp() { return cmp; }
+    void set_cmp(float setcmp) { cmp = setcmp; }
+    float get_hp_lvl() { return hp_lvl; }
+    void set_hp_lvl(float sethp_lvl) { hp_lvl = sethp_lvl; }
+    float get_mp_lvl() { return mp_lvl; }
+    void set_mp_lvl(float setmp_lvl) { mp_lvl = setmp_lvl; }
+    float get_msta() { return msta; }
+    void set_msta(float setmsta) { msta = setmsta; }
+    float get_csta() { return csta; }
+    void set_csta(float setcsta) { msta = setcsta; }
+    float get_sta_lvl() { return sta_lvl; }
+    void set_sta_lvl(float setsta_lvl) { sta_lvl = setsta_lvl; }
+};
+
+int main()
+{
+    wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
+    chr stefanus_tavilrond("Stephanus Tavilrond", r_human, r_none, c_warrior, c_priest, pc_knight, 1);
+    cout << "damnit" << endl;
+    return 0;
+}
