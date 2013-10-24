@@ -100,14 +100,8 @@ public:
         };
     static wpn GetNull()
     {
-        string w_setname = "N\\A";
-        int w_setmin = 0;
-        int w_setmax = 0;
-        int w_setcond = 0;
-        int w_setcost = 0;
-        material w_setmat = a_none;
-        element w_setelem = m_none;
-        w_type w_settype = blunt;
+        wpn * res = new wpn("N\\A",0, 0, 0, 0, a_none, m_none, blunt);
+        return res;
      };
     string GetW_display_name() { return w_display_name; }
     float GetW_minatk() { return w_minatk; }
@@ -142,13 +136,8 @@ public:
         }
     static armour GetNull()
     {
-        string a_setname = "N\\A";
-        int a_setvalue = 0;
-        int a_setcond = 0;
-        int a_setcost = 0;
-        material a_setmat = a_none;
-        element a_setelem = m_none;
-        a_type a_settype = t_none;
+    armour * res = new armour("N\\A",0,0,0,a_none,m_none,t_none);
+    return res;
     };
     string GetA_display_name() { return a_display_name; }
     float GetA_defense() { return a_defense; }
@@ -282,27 +271,27 @@ enum pclass
 // I can not find any way to store references to objects.
 // I tried maps, and they produced errors.
 // I tried blocks, they did not work either.
-/*class inventory{
+class inventory{
 public:
     wpn char_wpn[eq_wpn2];
     armour char_armour[eq_neck];
     inventory(){
-        char_wpn[eq_wpn1] = wpn::GetNull()
-        char_wpn[eq_wpn2] = wpn::GetNull()
-        char_armour[eq_shld] = wpn::GetNull()
-        char_armour[eq_hlm] = wpn::GetNull()
-        char_armour[eq_clth1] = wpn::GetNull()
-        char_armour[eq_clth2] = wpn::GetNull()
-        char_armour[eq_ndrwr] = wpn::GetNull()
-        char_armour[eq_arm_tors] = wpn::GetNull()
-        char_armour[eq_arm_lgs] = wpn::GetNull()
-        char_armour[eq_boots] = wpn::GetNull()
-        char_armour[eq_ggntlet] = wpn::GetNull()
-        char_armour[eq_clk] = wpn::GetNull()
-        char_armour[eq_arrow] = wpn::GetNull()
-        char_armour[eq_neck] = wpn::GetNull()
+        char_wpn[eq_wpn1] = wpn::GetNull();
+        char_wpn[eq_wpn2] = wpn::GetNull();
+        char_armour[eq_shld] = armour::GetNull();
+        char_armour[eq_hlm] = armour::GetNull();
+        char_armour[eq_clth1] = armour::GetNull();
+        char_armour[eq_clth2] = armour::GetNull();
+        char_armour[eq_ndrwr] = armour::GetNull();
+        char_armour[eq_arm_tors] = armour::GetNull();
+        char_armour[eq_arm_lgs] = armour::GetNull();
+        char_armour[eq_boots] = armour::GetNull();
+        char_armour[eq_ggntlet] = armour::GetNull();
+        char_armour[eq_clk] = armour::GetNull();
+        char_armour[eq_arrow] = armour::GetNull();
+        char_armour[eq_neck] = armour::GetNull();
         };
-};*/
+};
 
 
 class chr{
