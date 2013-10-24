@@ -13,11 +13,16 @@ struct attrib
     int atr_chr;
 };
 
-enum eq_slot
+enum wpn_slot
 {
-    eq_dummy,
+    eq_wpn_dummy = 0,
     eq_wpn1,
-    eq_wpn2,
+    eq_wpn2
+};
+
+enum armour_slot
+{
+    eq_arm_dummy = 0,
     eq_shld,
     eq_hlm,
     eq_clth1,
@@ -126,7 +131,7 @@ private:
     a_type a_wearer;
 public:
     armour(string a_setname, int a_setvalue, int a_setcond, int a_setcost, material a_setmat, element a_setelem, a_type a_settype)
-        {
+        { // Armour constructor. Important.
         a_display_name = a_setname;
         a_defense = a_setvalue;
         a_cond = a_setcond;
@@ -161,20 +166,83 @@ enum sex
         female
 };
 
-enum race1
+class race1
+{
+private:
+    string r1_display_name;
+    attrib r_max;
+    attrib r_min;
+public:
+    race1(string setname, int min_atr_str, int max_atr_str, int min_atr_int, int max_atr_int, int min_atr_wlp, int max_atr_wlp, int min_atr_agl, int max_atr_agl, int min_atr_dxt, int max_atr_dxt, int min_atr_chr, int max_atr_chr)
     {
-        r_human,
-        r_wood_elf,
-        r_high_elf,
-        r_dark_elf,
-        r_orc,
-        r_dwarf,
-        r_gnome,
-        r_halfling,
-        r_lizardman,
-        r_ogre,
-        r_goblin
+        r1_display_name = setname;
+        r_min.atr_str = min_atr_str;
+        r_max.atr_str = max_atr_str;
+        r_min.atr_int = min_atr_int;
+        r_max.atr_int = max_atr_int;
+        r_min.atr_wlp = min_atr_wlp;
+        r_max.atr_wlp = max_atr_wlp;
+        r_min.atr_agl = min_atr_agl;
+        r_max.atr_agl = max_atr_agl;
+        r_min.atr_dxt = min_atr_dxt;
+        r_max.atr_dxt = max_atr_dxt;
+        r_min.atr_chr = min_atr_chr;
+        r_max.atr_chr = max_atr_chr;
     };
+    static race1 GetNull()
+    {
+        string setname = "None";
+        int min_atr_str = 0;
+        int max_atr_str = 0;
+        int min_atr_int = 0;
+        int max_atr_int = 0;
+        int min_atr_wlp = 0;
+        int max_atr_wlp = 0;
+        int min_atr_agl = 0;
+        int max_atr_agl = 0;
+        int min_atr_dxt = 0;
+        int max_atr_dxt = 0;
+        int min_atr_chr = 0;
+        int max_atr_chr = 0;
+    };
+    int get_min_str() {return r_min.atr_str; }
+	void set_min_str(int set_min_atset_str) { r_min.atr_str = set_min_atset_str; }
+	int get_max_str() {return r_max.atr_str; }
+	void set_max_str(int set_max_atset_str) { r_max.atr_str = set_max_atset_str; }
+	int get_min_int() {return r_min.atr_int; }
+	void set_min_int(int set_min_atset_int) { r_min.atr_int = set_min_atset_int; }
+	int get_max_int() {return r_max.atr_int; }
+	void set_max_int(int set_max_atset_int) { r_max.atr_int = set_max_atset_int; }
+	int get_min_wlp() {return r_min.atr_wlp; }
+	void set_min_wlp(int set_min_atset_wlp) { r_min.atr_wlp = set_min_atset_wlp; }
+	int get_max_wlp() {return r_max.atr_wlp; }
+	void set_max_wlp(int set_max_atset_wlp) { r_max.atr_wlp = set_max_atset_wlp; }
+	int get_min_agl() {return r_min.atr_agl; }
+	void set_min_agl(int set_min_atset_agl) { r_min.atr_agl = set_min_atset_agl; }
+	int get_max_agl() {return r_max.atr_agl; }
+	void set_max_agl(int set_max_atset_agl) { r_max.atr_agl = set_max_atset_agl; }
+	int get_min_dxt() {return r_min.atr_dxt; }
+	void set_min_dxt(int set_min_atset_dxt) { r_min.atr_dxt = set_min_atset_dxt; }
+	int get_max_dxt() {return r_max.atr_dxt; }
+	void set_max_dxt(int set_max_atset_dxt) { r_max.atr_dxt = set_max_atset_dxt; }
+	int get_min_chr() {return r_min.atr_chr; }
+	void set_min_chr(int set_min_atset_chr) { r_min.atr_chr = set_min_atset_chr; }
+	int get_max_chr() {return r_max.atr_chr; }
+	void set_max_chr(int set_max_atset_chr) { r_max.atr_chr = set_max_atset_chr; }
+};
+
+const race1 r_human("Human", 8, 18, 8, 18, 8, 18, 8, 18, 8, 18, 8, 18);
+const race1 r_wood_elf("Wood Elf", 7, 17, 9, 19, 9, 19, 9, 19, 8, 18, 7, 17);
+const race1 r_high_elf("High Elf", 7, 17, 8, 18, 9, 19, 9, 19, 8, 18, 7, 17);
+const race1 r_dark_elf("Dark Elf", 7, 17, 8, 18, 8, 18, 9, 19, 9, 19, 7, 17);
+const race1 r_orc("Orc", 10, 20, 8, 18, 7, 17, 9, 19, 7, 17, 7, 17);
+const race1 r_dwarf("Dwarf", 10, 20, 8, 18, 8, 18, 6, 16, 8, 18, 8, 18);
+const race1 r_gnome("Gnome", 7, 17, 9, 19, 9, 19, 6, 16, 9, 19, 8, 18);
+const race1 r_halfling("Halfling", 7, 17, 8, 18, 8, 18, 9, 19, 7, 17, 9, 19);
+const race1 r_lizardman("Lizardman", 9, 19, 9, 19, 8, 18, 9, 19, 7, 17, 6, 16);
+const race1 r_ogre("Ogre", 12, 22, 7, 17, 7, 17, 9, 19, 7, 17, 6, 16);
+const race1 r_goblin("Goblin", 9, 19, 8, 18, 7, 17, 9, 19, 9, 19, 7, 17);
+
 enum race2
 {
         r_none,
@@ -209,34 +277,36 @@ enum pclass
         pc_headhunter
 };
 
+
+//INVENTORY BUGGED AT MOMENT!
+//For some reason, when ever there is a character-declaration and inventory-declaration together,
+//the whole software crashes. No idea why, but we're keeping the inventory out for a while.
 class inventory{
 public:
-    map<eq_slot,armour>*char_armour;
-    map<eq_slot,wpn>*char_wpn;
+    wpn char_wpn[eq_wpn2];        
+    armour char_armour[eq_neck];
     inventory(){
-    char_armour = new map<eq_slot,armour>();
-    char_wpn = new map<eq_slot,wpn>();
-    char_wpn->at(eq_wpn1) = wpn::GetNull();
-    char_wpn->at(eq_wpn2) = wpn::GetNull();
-    char_armour->at(eq_shld) = armour::GetNull();
-    char_armour->at(eq_hlm) = armour::GetNull();
-    char_armour->at(eq_clth1) = armour::GetNull();
-    char_armour->at(eq_clth2) = armour::GetNull();
-    char_armour->at(eq_ndrwr) = armour::GetNull();
-    char_armour->at(eq_arm_tors) = armour::GetNull();
-    char_armour->at(eq_arm_lgs) = armour::GetNull();
-    char_armour->at(eq_boots) = armour::GetNull();
-    char_armour->at(eq_ggntlet) = armour::GetNull();
-    char_armour->at(eq_clk) = armour::GetNull();
-    char_armour->at(eq_arrow) = armour::GetNull();
-    char_armour->at(eq_neck) = armour::GetNull();
+        char_wpn[eq_wpn1] = wpn::GetNull()
+        char_wpn[eq_wpn2] = wpn::GetNull()
+        char_armour[eq_shld] = wpn::GetNull()
+        char_armour[eq_hlm] = wpn::GetNull()
+        char_armour[eq_clth1] = wpn::GetNull()
+        char_armour[eq_clth2] = wpn::GetNull()
+        char_armour[eq_ndrwr] = wpn::GetNull()
+        char_armour[eq_arm_tors] = wpn::GetNull()
+        char_armour[eq_arm_lgs] = wpn::GetNull()
+        char_armour[eq_boots] = wpn::GetNull()
+        char_armour[eq_ggntlet] = wpn::GetNull()
+        char_armour[eq_clk] = wpn::GetNull()
+        char_armour[eq_arrow] = wpn::GetNull()
+        char_armour[eq_neck] = wpn::GetNull()
         };
 };
+
 
 class chr{
 private:
     string display_name;
-    race1 race;
     race2 sec_race;
     char_class class1;
     char_class class2;
@@ -256,10 +326,10 @@ private:
     float csta;
     float sta_lvl;
 public:
-    chr(string setname, race1 setrace, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
+    race1 *race;
+    chr(string setname, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
     {
     display_name = setname;
-    race = setrace;
     sec_race = setrace2;
     class1 = setclass1;
     class2 = setclass2;
@@ -278,8 +348,6 @@ public:
     };
     string GetName() { return display_name; }
     void set_name(string set_name) { display_name = set_name; }
-    race1 getrace() { return race; }
-    void set_race(race1 setrace) { race = setrace; }
     race2 getrace2() { return sec_race; }
     void set_race2(race2 setrace2) { sec_race = setrace2; }
     char_class getclass1() { return class1; }
@@ -320,8 +388,8 @@ public:
 int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
-    chr stefanus_tavilrond("Stephanus Tavilrond", r_human, r_none, c_warrior, c_priest, pc_knight, 1);
-    inventory inv_stef;
+    chr stefanus_tavilrond("Stephanus Tavilrond", r_none, c_warrior, c_priest, pc_knight, 1);
+    inventory shit;
     cout << "damnit" << endl;
     return 0;
 }
