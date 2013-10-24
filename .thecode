@@ -199,7 +199,7 @@ public:
         r_min.atr_chr = min_atr_chr;
         r_max.atr_chr = max_atr_chr;
     };
-    static race1 GetNull()
+    race1()
     {
         string setname = "None";
         int min_atr_str = 0;
@@ -214,6 +214,11 @@ public:
         int max_atr_dxt = 0;
         int min_atr_chr = 0;
         int max_atr_chr = 0;
+    };
+    static race1 GetNull()
+    {
+    race1 *res = new race1("None",0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    return *res;
     };
     int get_min_str() {return r_min.atr_str; }
 	void set_min_str(int set_min_atset_str) { r_min.atr_str = set_min_atset_str; }
@@ -338,9 +343,10 @@ private:
     float sta_lvl;
 public:
     race1 *race;
-    chr(string setname, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
+    chr(string setname, race1 setrace1, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
     {
     display_name = setname;
+    *race = setrace1;
     sec_race = setrace2;
     class1 = setclass1;
     class2 = setclass2;
@@ -399,7 +405,7 @@ public:
 int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
-    chr stefanus_tavilrond("Stephanus Tavilrond", r_none, c_warrior, c_priest, pc_knight, 1);
+    chr stefanus_tavilrond("Stephanus Tavilrond", r_human, r_none, c_warrior, c_priest, pc_knight, 1);
     cout << "damnit" << endl;
     return 0;
 }
