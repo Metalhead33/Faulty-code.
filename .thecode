@@ -209,6 +209,29 @@ enum pclass
         pc_headhunter
 };
 
+class inventory{
+public:
+    map<eq_slot,armour>*char_armour;
+    map<eq_slot,wpn>*char_wpn;
+    inventory(){
+    char_armour = new map<eq_slot,armour>();
+    char_wpn = new map<eq_slot,wpn>();
+    char_wpn->at(eq_wpn1) = wpn::GetNull();
+    char_wpn->at(eq_wpn2) = wpn::GetNull();
+    char_armour->at(eq_shld) = armour::GetNull();
+    char_armour->at(eq_hlm) = armour::GetNull();
+    char_armour->at(eq_clth1) = armour::GetNull();
+    char_armour->at(eq_clth2) = armour::GetNull();
+    char_armour->at(eq_ndrwr) = armour::GetNull();
+    char_armour->at(eq_arm_tors) = armour::GetNull();
+    char_armour->at(eq_arm_lgs) = armour::GetNull();
+    char_armour->at(eq_boots) = armour::GetNull();
+    char_armour->at(eq_ggntlet) = armour::GetNull();
+    char_armour->at(eq_clk) = armour::GetNull();
+    char_armour->at(eq_arrow) = armour::GetNull();
+    char_armour->at(eq_neck) = armour::GetNull();
+        };
+};
 
 class chr{
 private:
@@ -233,12 +256,8 @@ private:
     float csta;
     float sta_lvl;
 public:
-    map<eq_slot,armour>*char_armour;
-    map<eq_slot,wpn>*char_wpn;
     chr(string setname, race1 setrace, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
     {
-    char_armour = new map<eq_slot,armour>();
-    char_wpn = new map<eq_slot,wpn>();
     display_name = setname;
     race = setrace;
     sec_race = setrace2;
@@ -256,20 +275,6 @@ public:
     msta = 0.00;
     csta = 0.00;
     sta_lvl = 0.00;
-    char_wpn->at(eq_wpn1) = wpn::GetNull();
-    char_wpn->at(eq_wpn2) = wpn::GetNull();
-    char_armour->at(eq_shld) = armour::GetNull();
-    char_armour->at(eq_hlm) = armour::GetNull();
-    char_armour->at(eq_clth1) = armour::GetNull();
-    char_armour->at(eq_clth2) = armour::GetNull();
-    char_armour->at(eq_ndrwr) = armour::GetNull();
-    char_armour->at(eq_arm_tors) = armour::GetNull();
-    char_armour->at(eq_arm_lgs) = armour::GetNull();
-    char_armour->at(eq_boots) = armour::GetNull();
-    char_armour->at(eq_ggntlet) = armour::GetNull();
-    char_armour->at(eq_clk) = armour::GetNull();
-    char_armour->at(eq_arrow) = armour::GetNull();
-    char_armour->at(eq_neck) = armour::GetNull();
     };
     string GetName() { return display_name; }
     void set_name(string set_name) { display_name = set_name; }
@@ -316,6 +321,7 @@ int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
     chr stefanus_tavilrond("Stephanus Tavilrond", r_human, r_none, c_warrior, c_priest, pc_knight, 1);
+    inventory inv_stef;
     cout << "damnit" << endl;
     return 0;
 }
