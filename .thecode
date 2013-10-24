@@ -98,6 +98,17 @@ public:
         w_elem = w_setelem;
         w_usage = w_settype;
         };
+    wpn()
+        {
+        string w_setname = "N\\A";
+        int w_setmin = 0;
+        int w_setmax = 0;
+        int w_setcond = 0;
+        int w_setcost = 0;
+        material w_setmat = a_none;
+        element w_setelem = m_none;
+        w_type w_settype = blunt;
+        };
     static wpn GetNull()
     {
         wpn *res = new wpn("N\\A",0, 0, 0, 0, a_none, m_none, blunt);
@@ -133,6 +144,16 @@ public:
         a_mat = a_setmat;
         a_elem = a_setelem;
         a_wearer = a_settype;
+        }
+    armour()
+        {
+        string a_setname = "N\\A";
+        int a_setvalue = 0;
+        int a_setcond = 0;
+        int a_setcost = 0;
+        material a_setmat = a_none;
+        element a_setelem = m_none;
+        a_type a_settype = t_none;
         }
     static armour GetNull()
     {
