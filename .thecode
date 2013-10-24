@@ -123,7 +123,7 @@ public:
     element GetW_elem() { return w_elem; }
     w_type getW_usage() { return w_usage; }
 };
-
+wpn w_dummy("N\\A",0, 0, 0, 0, a_none, m_none, blunt);
 
 class armour{
 private:
@@ -168,7 +168,7 @@ public:
     element GetA_elem() { return a_elem; }
     a_type getA_wearer() { return a_wearer; }
 };
-
+armour a_dummy("N\\A",0,0,0,a_none,m_none,t_none);
 
 enum sex
 {
@@ -220,6 +220,7 @@ public:
     race1 *res = new race1("None",0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     return *res;
     };
+    string get_display_name() {return r1_display_name; }
     int get_min_str() {return r_min.atr_str; }
 	void set_min_str(int set_min_atset_str) { r_min.atr_str = set_min_atset_str; }
 	int get_max_str() {return r_max.atr_str; }
@@ -246,17 +247,18 @@ public:
 	void set_max_chr(int set_max_atset_chr) { r_max.atr_chr = set_max_atset_chr; }
 };
 
-const race1 r_human("Human", 8, 18, 8, 18, 8, 18, 8, 18, 8, 18, 8, 18);
-const race1 r_wood_elf("Wood Elf", 7, 17, 9, 19, 9, 19, 9, 19, 8, 18, 7, 17);
-const race1 r_high_elf("High Elf", 7, 17, 8, 18, 9, 19, 9, 19, 8, 18, 7, 17);
-const race1 r_dark_elf("Dark Elf", 7, 17, 8, 18, 8, 18, 9, 19, 9, 19, 7, 17);
-const race1 r_orc("Orc", 10, 20, 8, 18, 7, 17, 9, 19, 7, 17, 7, 17);
-const race1 r_dwarf("Dwarf", 10, 20, 8, 18, 8, 18, 6, 16, 8, 18, 8, 18);
-const race1 r_gnome("Gnome", 7, 17, 9, 19, 9, 19, 6, 16, 9, 19, 8, 18);
-const race1 r_halfling("Halfling", 7, 17, 8, 18, 8, 18, 9, 19, 7, 17, 9, 19);
-const race1 r_lizardman("Lizardman", 9, 19, 9, 19, 8, 18, 9, 19, 7, 17, 6, 16);
-const race1 r_ogre("Ogre", 12, 22, 7, 17, 7, 17, 9, 19, 7, 17, 6, 16);
-const race1 r_goblin("Goblin", 9, 19, 8, 18, 7, 17, 9, 19, 9, 19, 7, 17);
+race1 r_dummy("None",0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+race1 r_human("Human", 8, 18, 8, 18, 8, 18, 8, 18, 8, 18, 8, 18);
+race1 r_wood_elf("Wood Elf", 7, 17, 9, 19, 9, 19, 9, 19, 8, 18, 7, 17);
+race1 r_high_elf("High Elf", 7, 17, 8, 18, 9, 19, 9, 19, 8, 18, 7, 17);
+race1 r_dark_elf("Dark Elf", 7, 17, 8, 18, 8, 18, 9, 19, 9, 19, 7, 17);
+race1 r_orc("Orc", 10, 20, 8, 18, 7, 17, 9, 19, 7, 17, 7, 17);
+race1 r_dwarf("Dwarf", 10, 20, 8, 18, 8, 18, 6, 16, 8, 18, 8, 18);
+race1 r_gnome("Gnome", 7, 17, 9, 19, 9, 19, 6, 16, 9, 19, 8, 18);
+race1 r_halfling("Halfling", 7, 17, 8, 18, 8, 18, 9, 19, 7, 17, 9, 19);
+race1 r_lizardman("Lizardman", 9, 19, 9, 19, 8, 18, 9, 19, 7, 17, 6, 16);
+race1 r_ogre("Ogre", 12, 22, 7, 17, 7, 17, 9, 19, 7, 17, 6, 16);
+race1 r_goblin("Goblin", 9, 19, 8, 18, 7, 17, 9, 19, 9, 19, 7, 17);
 
 enum race2
 {
@@ -299,23 +301,23 @@ enum pclass
 // I tried blocks, they did not work either.
 class inventory{
 public:
-    wpn char_wpn[eq_wpn2];
-    armour char_armour[eq_neck];
+    wpn *char_wpn[eq_wpn2];
+    armour *char_armour[eq_neck];
     inventory(){
-        char_wpn[eq_wpn1] = wpn::GetNull();
-        char_wpn[eq_wpn2] = wpn::GetNull();
-        char_armour[eq_shld] = armour::GetNull();
-        char_armour[eq_hlm] = armour::GetNull();
-        char_armour[eq_clth1] = armour::GetNull();
-        char_armour[eq_clth2] = armour::GetNull();
-        char_armour[eq_ndrwr] = armour::GetNull();
-        char_armour[eq_arm_tors] = armour::GetNull();
-        char_armour[eq_arm_lgs] = armour::GetNull();
-        char_armour[eq_boots] = armour::GetNull();
-        char_armour[eq_ggntlet] = armour::GetNull();
-        char_armour[eq_clk] = armour::GetNull();
-        char_armour[eq_arrow] = armour::GetNull();
-        char_armour[eq_neck] = armour::GetNull();
+        char_wpn[eq_wpn1] = &w_dummy;
+        char_wpn[eq_wpn2] = &w_dummy;
+        char_armour[eq_shld] = &a_dummy;
+        char_armour[eq_hlm] = &a_dummy;
+        char_armour[eq_clth1] = &a_dummy;
+        char_armour[eq_clth2] = &a_dummy;
+        char_armour[eq_ndrwr] = &a_dummy;
+        char_armour[eq_arm_tors] = &a_dummy;
+        char_armour[eq_arm_lgs] = &a_dummy;
+        char_armour[eq_boots] = &a_dummy;
+        char_armour[eq_ggntlet] = &a_dummy;
+        char_armour[eq_clk] = &a_dummy;
+        char_armour[eq_arrow] = &a_dummy;
+        char_armour[eq_neck] = &a_dummy;
         };
 };
 
@@ -343,10 +345,11 @@ private:
     float sta_lvl;
 public:
     race1* race;
+    inventory inv;
     chr(string setname, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
     {
     display_name = setname;
-    race = &r_human;
+    race = &r_dummy;
     sec_race = setrace2;
     class1 = setclass1;
     class2 = setclass2;
@@ -362,6 +365,12 @@ public:
     msta = 0.00;
     csta = 0.00;
     sta_lvl = 0.00;
+    mod_attrib.atr_str = 0;
+    mod_attrib.atr_int = 0;
+    mod_attrib.atr_wlp = 0;
+    mod_attrib.atr_agl = 0;
+    mod_attrib.atr_dxt = 0;
+    mod_attrib.atr_chr = 0;
     };
     string GetName() { return display_name; }
     void set_name(string set_name) { display_name = set_name; }
@@ -400,12 +409,68 @@ public:
     void set_csta(float setcsta) { msta = setcsta; }
     float get_sta_lvl() { return sta_lvl; }
     void set_sta_lvl(float setsta_lvl) { sta_lvl = setsta_lvl; }
+    void default_attributes()
+    {
+    base_attrib.atr_str = race->get_min_str();
+    base_attrib.atr_int = race->get_min_int();
+    base_attrib.atr_wlp = race->get_min_wlp();
+    base_attrib.atr_agl = race->get_min_agl();
+    base_attrib.atr_dxt = race->get_min_dxt();
+    base_attrib.atr_chr = race->get_min_chr();
+        };
+    int get_bstr() { return base_attrib.atr_str; }
+    int get_bint() { return base_attrib.atr_int; }
+    int get_bwlp() { return base_attrib.atr_wlp; }
+    int get_bagl() { return base_attrib.atr_agl; }
+    int get_bdxt() { return base_attrib.atr_dxt; }
+    int get_bchr() { return base_attrib.atr_chr; }
+    void set_bstr(int setstr) { base_attrib.atr_str = setstr; }
+    void set_bint(int setint) { base_attrib.atr_int = setint; }
+    void set_bwlp(int setwlp) { base_attrib.atr_wlp = setwlp; }
+    void set_bagl(int setagl) { base_attrib.atr_agl = setagl; }
+    void set_bdxt(int setdxt) { base_attrib.atr_dxt = setdxt; }
+    void set_bchr(int setchr) { base_attrib.atr_chr = setchr; }
+    int get_mstr() { return mod_attrib.atr_str; }
+    int get_mint() { return mod_attrib.atr_int; }
+    int get_mwlp() { return mod_attrib.atr_wlp; }
+    int get_magl() { return mod_attrib.atr_agl; }
+    int get_mdxt() { return mod_attrib.atr_dxt; }
+    int get_mchr() { return mod_attrib.atr_chr; }
+    void set_mstr(int setstr) { mod_attrib.atr_str = setstr; }
+    void set_mint(int setint) { mod_attrib.atr_int = setint; }
+    void set_mwlp(int setwlp) { mod_attrib.atr_wlp = setwlp; }
+    void set_magl(int setagl) { mod_attrib.atr_agl = setagl; }
+    void set_mdxt(int setdxt) { mod_attrib.atr_dxt = setdxt; }
+    void set_mchr(int setchr) { mod_attrib.atr_chr = setchr; }
+    void plus_mstr(int plusstr) { mod_attrib.atr_str = mod_attrib.atr_str + plusstr; }
+    void plus_mint(int plusint) { mod_attrib.atr_int = mod_attrib.atr_int + plusint; }
+    void plus_mwlp(int pluswlp) { mod_attrib.atr_wlp = mod_attrib.atr_wlp + pluswlp; }
+    void plus_magl(int plusagl) { mod_attrib.atr_agl = mod_attrib.atr_agl + plusagl; }
+    void plus_mdxt(int plusdxt) { mod_attrib.atr_dxt = mod_attrib.atr_dxt + plusdxt; }
+    void plus_mchr(int pluschr) { mod_attrib.atr_chr = mod_attrib.atr_chr + pluschr; }
+    void min_mstr(int minustr) { mod_attrib.atr_str = mod_attrib.atr_str + minustr; }
+    void min_mint(int minuint) { mod_attrib.atr_int = mod_attrib.atr_int + minuint; }
+    void min_mwlp(int minuwlp) { mod_attrib.atr_wlp = mod_attrib.atr_wlp + minuwlp; }
+    void min_magl(int minuagl) { mod_attrib.atr_agl = mod_attrib.atr_agl + minuagl; }
+    void min_mdxt(int minudxt) { mod_attrib.atr_dxt = mod_attrib.atr_dxt + minudxt; }
+    void min_mchr(int minuchr) { mod_attrib.atr_chr = mod_attrib.atr_chr + minuchr; }
+    int getSrength() { return (get_bstr() + get_mstr());}
+    int getIntelligence() { return (get_bint() + get_mint());}
+    int getWillpower() { return (get_bwlp() + get_mwlp()); }
+    int getAgility() { return (get_bagl() + get_magl());}
+    int getDexterity() { return (get_bdxt() + get_mdxt());}
+    int getCharisma() { return (get_bchr() + get_mchr());}
 };
 
 int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
     chr stefanus_tavilrond("Stephanus Tavilrond", r_none, c_warrior, c_priest, pc_knight, 1);
+    stefanus_tavilrond.race = &r_human;
+    stefanus_tavilrond.inv.char_wpn[eq_wpn1] = &iron_sword;
+    cout << stefanus_tavilrond.inv.char_wpn[eq_wpn1]->GetW_display_name() << endl;
+    stefanus_tavilrond.default_attributes();
+    cout << stefanus_tavilrond.getCharisma() << endl;
     cout << "damnit" << endl;
     return 0;
-}
+};
