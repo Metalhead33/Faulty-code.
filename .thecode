@@ -342,11 +342,11 @@ private:
     float csta;
     float sta_lvl;
 public:
-    race1 *race;
-    chr(string setname, race1 setrace1, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
+    race1* race;
+    chr(string setname, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
     {
     display_name = setname;
-    *race = setrace1;
+    race = &r_human;
     sec_race = setrace2;
     class1 = setclass1;
     class2 = setclass2;
@@ -405,7 +405,7 @@ public:
 int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
-    chr stefanus_tavilrond("Stephanus Tavilrond", r_human, r_none, c_warrior, c_priest, pc_knight, 1);
+    chr stefanus_tavilrond("Stephanus Tavilrond", r_none, c_warrior, c_priest, pc_knight, 1);
     cout << "damnit" << endl;
     return 0;
 }
