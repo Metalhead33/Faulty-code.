@@ -131,7 +131,7 @@ private:
     a_type a_wearer;
 public:
     armour(string a_setname, int a_setvalue, int a_setcond, int a_setcost, material a_setmat, element a_setelem, a_type a_settype)
-        { // Armour constructor. Important.
+        {
         a_display_name = a_setname;
         a_defense = a_setvalue;
         a_cond = a_setcond;
@@ -278,12 +278,13 @@ enum pclass
 };
 
 
-//INVENTORY BUGGED AT MOMENT!
-//For some reason, when ever there is a character-declaration and inventory-declaration together,
-//the whole software crashes. No idea why, but we're keeping the inventory out for a while.
-class inventory{
+// Commented out, because of its refusal to work.
+// I can not find any way to store references to objects.
+// I tried maps, and they produced errors.
+// I tried blocks, they did not work either.
+/*class inventory{
 public:
-    wpn char_wpn[eq_wpn2];        
+    wpn char_wpn[eq_wpn2];
     armour char_armour[eq_neck];
     inventory(){
         char_wpn[eq_wpn1] = wpn::GetNull()
@@ -301,7 +302,7 @@ public:
         char_armour[eq_arrow] = wpn::GetNull()
         char_armour[eq_neck] = wpn::GetNull()
         };
-};
+};*/
 
 
 class chr{
@@ -389,7 +390,6 @@ int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
     chr stefanus_tavilrond("Stephanus Tavilrond", r_none, c_warrior, c_priest, pc_knight, 1);
-    inventory shit;
     cout << "damnit" << endl;
     return 0;
 }
