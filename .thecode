@@ -100,8 +100,8 @@ public:
         };
     static wpn GetNull()
     {
-        wpn * res = new wpn("N\\A",0, 0, 0, 0, a_none, m_none, blunt);
-        return res;
+        wpn *res = new wpn("N\\A",0, 0, 0, 0, a_none, m_none, blunt);
+        return *res;
      };
     string GetW_display_name() { return w_display_name; }
     float GetW_minatk() { return w_minatk; }
@@ -136,8 +136,8 @@ public:
         }
     static armour GetNull()
     {
-    armour * res = new armour("N\\A",0,0,0,a_none,m_none,t_none);
-    return res;
+    armour *res = new armour("N\\A",0,0,0,a_none,m_none,t_none);
+    return *res;
     };
     string GetA_display_name() { return a_display_name; }
     float GetA_defense() { return a_defense; }
