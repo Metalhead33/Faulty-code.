@@ -39,15 +39,29 @@ enum armour_slot
 
 enum w_type
 {
-        blunt,
+        blunt = 1,
         ranged,
         piercing,
         slashing
 };
 
+enum w_type2
+{
+        crude = 1,
+        bow,
+        crossbow,
+        short_blade,
+        long_blade,
+        axe,
+        halberd,
+        hammer,
+        spear,
+        special
+};
+
 enum a_type
 {
-    t_none,
+    t_none = 1,
     cloth,
     light_armour,
     heavy_armour
@@ -86,8 +100,9 @@ private:
     material w_mat;
     element w_elem;
     w_type w_usage;
+    w_type2 w_kind;
 public:
-    wpn(string w_setname, int w_setmin, int w_setmax, int w_setcond, int w_setcost, material w_setmat, element w_setelem, w_type w_settype)
+    wpn(string w_setname, int w_setmin, int w_setmax, int w_setcond, int w_setcost, material w_setmat, element w_setelem, w_type w_settype, w_type2 w_setkind)
         {
         w_display_name = w_setname;
         w_minatk = w_setmin;
@@ -97,6 +112,7 @@ public:
         w_mat = w_setmat;
         w_elem = w_setelem;
         w_usage = w_settype;
+        w_kind = w_setkind;
         };
     wpn()
         {
@@ -108,10 +124,11 @@ public:
         material w_setmat = a_none;
         element w_setelem = m_none;
         w_type w_settype = blunt;
+        w_kind = crude;
         };
     static wpn GetNull()
     {
-        wpn *res = new wpn("N\\A",0, 0, 0, 0, a_none, m_none, blunt);
+        wpn *res = new wpn("N\\A",0, 0, 0, 0, a_none, m_none, blunt, crude);
         return *res;
      };
     string GetW_display_name() { return w_display_name; }
@@ -123,7 +140,7 @@ public:
     element GetW_elem() { return w_elem; }
     w_type getW_usage() { return w_usage; }
 };
-wpn w_dummy("N\\A",0, 0, 0, 0, a_none, m_none, blunt);
+wpn w_dummy("N\\A",0, 0, 0, 0, a_none, m_none, blunt, crude);
 
 class armour{
 private:
@@ -343,7 +360,80 @@ enum race2_setup
         sr_wererat
 };
 
-enum char_class
+class char_class
+{
+private:
+    string c_display_name;
+    bool arcane_magic;
+    bool cleric_magic;
+    bool druid_magic;
+    bool can_use[special];
+    bool can_wear[heavy_armour];
+    attrib requirement;
+public:
+    char_class(string set_name, bool setmagic1, bool setmagic2, bool setmagic3, int setr_atr_str, int setr_atr_int, int setr_atr_wlp, int setr_atr_agl, int setr_atr_dxt, int setr_atr_chr, bool can_use_crude, bool can_use_bow, bool can_use_crossbow, bool can_use_short_blade, bool can_use_long_blade, bool can_use_axe, bool can_use_halberd, bool can_use_hammer, bool can_use_spear, bool can_use_special , bool can_wear_t_none, bool can_wear_cloth, bool can_wear_light_armour, bool can_wear_heavy_armour)
+    {
+        c_display_name = set_name;
+        arcane_magic = setmagic1;
+        cleric_magic = setmagic2;
+        druid_magic = setmagic3;
+        requirement.atr_str = setr_atr_str;
+        requirement.atr_int = setr_atr_int;
+        requirement.atr_wlp = setr_atr_wlp;
+        requirement.atr_agl = setr_atr_agl;
+        requirement.atr_dxt = setr_atr_dxt;
+        requirement.atr_chr = setr_atr_chr;
+        can_use[crude] = can_use_crude;
+        can_use[bow] = can_use_bow;
+        can_use[crossbow] = can_use_crossbow;
+        can_use[short_blade] = can_use_short_blade;
+        can_use[long_blade] = can_use_long_blade;
+        can_use[axe] = can_use_axe;
+        can_use[halberd] = can_use_halberd;
+        can_use[hammer] = can_use_hammer;
+        can_use[spear] = can_use_spear;
+        can_use[special] = can_use_special;
+        can_wear[t_none] = can_wear_t_none;
+        can_wear[cloth] = can_wear_cloth;
+        can_wear[light_armour] = can_wear_light_armour;
+        can_wear[heavy_armour] = can_wear_heavy_armour
+    };
+    char_class()
+    {
+        string set_name = "None";
+        bool setmagic1 = false;
+        bool setmagic2 = false;
+        setmagic3 = false;
+        setr_atr_str = 0;
+        setr_atr_int = 0;
+        setr_atr_wlp = 0;
+        setr_atr_agl = 0;
+        setr_atr_dxt = 0;
+        setr_atr_chr = 0;
+        bool can_use_crude = true;
+        bool can_use_bow = true;
+        bool can_use_crossbow = true;
+        bool can_use_short_blade = true;
+        bool can_use_long_blade = false;
+        bool can_use_axe = true;
+        bool can_use_halberd = false;
+        bool can_use_hammer = false;
+        bool can_use_spear = true;
+        bool can_use_special = false;
+        bool can_wear_t_none = true;
+        bool can_wear_cloth = true;
+        bool can_wear_light_armour = true;
+        bool can_wear_heavy_armour = false;
+    };
+    static char_class GetNull()
+    {
+    char_class *res = new char_class("None",false, false, false, 0, 0, 0, 0, 0, 0, true, true, true, true, false, true, false, false, true, false, true, true, true, false);
+    return *res;
+    };
+};
+char_class c_dummy("None",false, false, false, 0, 0, 0, 0, 0, 0, true, true, true, true, false, true, false, false, true, false, true, true, true, false);
+
+enum char_class_setup
 {
         c_none,
         c_druid,
@@ -351,6 +441,7 @@ enum char_class
         c_magician,
         c_warrior
 };
+
 
 enum pclass
 {
