@@ -5,12 +5,12 @@ using namespace std;
 
 struct attrib
 {
-    int atr_str;
-    int atr_int;
-    int atr_wlp;
-    int atr_agl;
-    int atr_dxt;
-    int atr_chr;
+    signed int atr_str;
+    signed int atr_int;
+    signed int atr_wlp;
+    signed int atr_agl;
+    signed int atr_dxt;
+    signed int atr_chr;
 };
 
 enum wpn_slot
@@ -260,17 +260,87 @@ race1 r_lizardman("Lizardman", 9, 19, 9, 19, 8, 18, 9, 19, 7, 17, 6, 16);
 race1 r_ogre("Ogre", 12, 22, 7, 17, 7, 17, 9, 19, 7, 17, 6, 16);
 race1 r_goblin("Goblin", 9, 19, 8, 18, 7, 17, 9, 19, 9, 19, 7, 17);
 
-enum race2
+enum race1_setup
 {
-        r_none,
-        r_vampire,
-        r_lich,
-        r_werewolf,
-        r_werelion,
-        r_werebear,
-        r_wereboar,
-        r_weretiger,
-        r_wererat
+    sr_dummy = 0,
+    sr_human,
+    sr_wood_elf,
+    sr_high_elf,
+    sr_dark_elf,
+    sr_orc,
+    sr_dwarf,
+    sr_gnome,
+    sr_halfling,
+    sr_lizardman,
+    sr_ogre,
+    sr_goblin
+    };
+
+class race2
+{
+private:
+    string r2_display_name;
+    attrib r2_bonus;
+public:
+    race2(string r2_setname, signed int set_bon_atset_str, signed int set_bon_atset_int, signed int set_bon_atset_wlp, signed int set_bon_agl, signed int set_bon_atset_dxt, signed int set_bon_atset_chr)
+    {
+    r2_display_name = r2_setname;
+    r2_bonus.atr_str = set_bon_atset_str;
+    r2_bonus.atr_int = set_bon_atset_int;
+    r2_bonus.atr_wlp = set_bon_atset_wlp;
+    r2_bonus.atr_agl = set_bon_agl;
+    r2_bonus.atr_dxt = set_bon_atset_dxt;
+    r2_bonus.atr_chr = set_bon_atset_chr;
+    };
+    race2()
+    {
+    string r2_setname = "None";
+    int set_bon_atset_str = 0;
+    int set_bon_atset_int = 0;
+    int set_bon_atset_wlp = 0;
+    int set_bon_atset_agl = 0;
+    int set_bon_atset_dxt = 0;
+    int set_bon_atset_chr = 0;
+    };
+    static race2 GetNull()
+    {
+    race2 *res = new race2("None",0, 0, 0, 0, 0, 0);
+    return *res;
+    };
+	int get_bon_str() {return r2_bonus.atr_str; }
+	void set_bon_str(int set_bon_atset_str) { r2_bonus.atr_str = set_bon_atset_str; }
+	int get_bon_int() {return r2_bonus.atr_int; }
+	void set_bon_int(int set_bon_atset_int) { r2_bonus.atr_int = set_bon_atset_int; }
+	int get_bon_wlp() {return r2_bonus.atr_wlp; }
+	void set_bon_wlp(int set_bon_atset_wlp) { r2_bonus.atr_wlp = set_bon_atset_wlp; }
+	int get_bon_agl() {return r2_bonus.atr_agl; }
+	void set_bon_agl(int set_bon_atset_agl) { r2_bonus.atr_agl = set_bon_atset_agl; }
+	int get_bon_dxt() {return r2_bonus.atr_dxt; }
+	void set_bon_dxt(int set_bon_atset_dxt) { r2_bonus.atr_dxt = set_bon_atset_dxt; }
+	int get_bon_chr() {return r2_bonus.atr_chr; }
+	void set_bon_chr(int set_bon_atset_chr) { r2_bonus.atr_chr = set_bon_atset_chr; }
+};
+race2 r_none("None", 0, 0, 0, 0, 0, 0);
+race2 r_vampire("Vampire", 7, 0, 0, 1, 1, 2);
+race2 r_lich("Lich", 0, 6, 6, 0, 0, -1);
+race2 r_werewolf("Werewolf", 6, 0, 2, 0, 0, 0);
+race2 r_werebear("Werebear", 10, 0, 0, 0, -2, -2);
+race2 r_werelion("Werelion", 5, 0, 0, 0, 3, 0);
+race2 r_wereboar("Wereboar", 8, 0, 0, 0, -1, 0);
+race2 r_weretiger("Weretiger", 5, 0, 0, 1, 2, 0);
+race2 r_wererat("Wererat", 1, 3, 1, 0, 3, -1);
+
+enum race2_setup
+{
+        sr_none,
+        sr_vampire,
+        sr_lich,
+        sr_werewolf,
+        sr_werelion,
+        sr_werebear,
+        sr_wereboar,
+        sr_weretiger,
+        sr_wererat
 };
 
 enum char_class
@@ -295,10 +365,6 @@ enum pclass
 };
 
 
-// Commented out, because of its refusal to work.
-// I can not find any way to store references to objects.
-// I tried maps, and they produced errors.
-// I tried blocks, they did not work either.
 class inventory{
 public:
     wpn *char_wpn[eq_wpn2];
@@ -325,7 +391,6 @@ public:
 class chr{
 private:
     string display_name;
-    race2 sec_race;
     char_class class1;
     char_class class2;
     pclass prestige_class;
@@ -345,12 +410,80 @@ private:
     float sta_lvl;
 public:
     race1* race;
+    race2* sec_race;
     inventory inv;
-    chr(string setname, race2 setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
+    chr(string setname, race1_setup setrace, race2_setup setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
     {
     display_name = setname;
-    race = &r_dummy;
-    sec_race = setrace2;
+    switch (setrace)
+    {
+        case sr_dummy:
+            race = &r_dummy;
+            break;
+        case sr_human:
+            race = &r_human;
+            break;
+        case sr_wood_elf:
+            race = &r_wood_elf;
+            break;
+        case sr_high_elf:
+            race = &r_high_elf;
+            break;
+        case sr_dark_elf:
+            race = &r_dark_elf;
+            break;
+        case sr_orc:
+            race = &r_orc;
+            break;
+        case sr_dwarf:
+            race = &r_dwarf;
+            break;
+        case sr_gnome:
+            race = &r_gnome;
+            break;
+        case sr_halfling:
+            race = &r_halfling;
+            break;
+        case sr_lizardman:
+            race = &r_lizardman;
+            break;
+        case sr_ogre:
+            race = &r_ogre;
+            break;
+        case sr_goblin:
+            race = &r_goblin;
+            break;
+    }
+    switch (setrace2)
+    {
+        case sr_none:
+            sec_race = &r_none;
+            break;
+        case sr_vampire:
+            sec_race = &r_vampire;
+            break;
+        case sr_lich:
+            sec_race = &r_lich;
+            break;
+        case sr_werewolf:
+            sec_race = &r_werewolf;
+            break;
+        case sr_werebear:
+            sec_race = &r_werebear;
+            break;
+        case sr_wereboar:
+            sec_race = &r_wereboar;
+            break;
+        case sr_werelion:
+            sec_race = &r_werelion;
+            break;
+        case sr_wererat:
+            sec_race = &r_wererat;
+            break;
+        case sr_weretiger:
+            sec_race = &r_weretiger;
+            break;
+    }
     class1 = setclass1;
     class2 = setclass2;
     prestige_class = setpclass;
@@ -374,8 +507,76 @@ public:
     };
     string GetName() { return display_name; }
     void set_name(string set_name) { display_name = set_name; }
-    race2 getrace2() { return sec_race; }
-    void set_race2(race2 setrace2) { sec_race = setrace2; }
+    void set_race2(race1_setup setrace)
+    { switch (setrace)
+    {
+        case sr_dummy:
+            race = &r_dummy;
+            break;
+        case sr_human:
+            race = &r_human;
+            break;
+        case sr_wood_elf:
+            race = &r_wood_elf;
+            break;
+        case sr_high_elf:
+            race = &r_high_elf;
+            break;
+        case sr_dark_elf:
+            race = &r_dark_elf;
+            break;
+        case sr_orc:
+            race = &r_orc;
+            break;
+        case sr_dwarf:
+            race = &r_dwarf;
+            break;
+        case sr_gnome:
+            race = &r_gnome;
+            break;
+        case sr_halfling:
+            race = &r_halfling;
+            break;
+        case sr_lizardman:
+            race = &r_lizardman;
+            break;
+        case sr_ogre:
+            race = &r_ogre;
+            break;
+        case sr_goblin:
+            race = &r_goblin;
+            break;
+    }; }
+    void set_race2(race2_setup setrace2) { switch (setrace2)
+    {
+        case sr_none:
+            sec_race = &r_none;
+            break;
+        case sr_vampire:
+            sec_race = &r_vampire;
+            break;
+        case sr_lich:
+            sec_race = &r_lich;
+            break;
+        case sr_werewolf:
+            sec_race = &r_werewolf;
+            break;
+        case sr_werebear:
+            sec_race = &r_werebear;
+            break;
+        case sr_wereboar:
+            sec_race = &r_wereboar;
+            break;
+        case sr_werelion:
+            sec_race = &r_werelion;
+            break;
+        case sr_wererat:
+            sec_race = &r_wererat;
+            break;
+        case sr_weretiger:
+            sec_race = &r_weretiger;
+            break;
+    }; }
     char_class getclass1() { return class1; }
     void set_class1(char_class setclass1) { class1 = setclass1; }
     char_class getclass2() { return class2; }
@@ -430,12 +631,18 @@ public:
     void set_bagl(int setagl) { base_attrib.atr_agl = setagl; }
     void set_bdxt(int setdxt) { base_attrib.atr_dxt = setdxt; }
     void set_bchr(int setchr) { base_attrib.atr_chr = setchr; }
-    int get_mstr() { return mod_attrib.atr_str; }
-    int get_mint() { return mod_attrib.atr_int; }
-    int get_mwlp() { return mod_attrib.atr_wlp; }
-    int get_magl() { return mod_attrib.atr_agl; }
-    int get_mdxt() { return mod_attrib.atr_dxt; }
-    int get_mchr() { return mod_attrib.atr_chr; }
+    void refresh_mstr() { mod_attrib.atr_str = (sec_race->get_bon_str()); }
+    void refresh_mint() { mod_attrib.atr_int = (sec_race->get_bon_int()); }
+    void refresh_mwlp() { mod_attrib.atr_wlp = (sec_race->get_bon_wlp()); }
+    void refresh_magl() { mod_attrib.atr_agl = (sec_race->get_bon_agl()); }
+    void refresh_mdxt() { mod_attrib.atr_dxt = (sec_race->get_bon_dxt()); }
+    void refresh_mchr() { mod_attrib.atr_chr = (sec_race->get_bon_chr()); }
+    int get_mstr() { refresh_mstr(); return mod_attrib.atr_str; }
+    int get_mint() { refresh_mint(); return mod_attrib.atr_int; }
+    int get_mwlp() { refresh_mwlp(); return mod_attrib.atr_wlp; }
+    int get_magl() { refresh_magl(); return mod_attrib.atr_agl; }
+    int get_mdxt() { refresh_mdxt(); return mod_attrib.atr_dxt; }
+    int get_mchr() { refresh_mchr(); return mod_attrib.atr_chr; }
     void set_mstr(int setstr) { mod_attrib.atr_str = setstr; }
     void set_mint(int setint) { mod_attrib.atr_int = setint; }
     void set_mwlp(int setwlp) { mod_attrib.atr_wlp = setwlp; }
@@ -465,7 +672,7 @@ public:
 int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
-    chr stefanus_tavilrond("Stephanus Tavilrond", r_none, c_warrior, c_priest, pc_knight, 1);
+    chr stefanus_tavilrond("Stephanus Tavilrond", sr_human, sr_lich, c_warrior, c_priest, pc_knight, 1);
     stefanus_tavilrond.race = &r_human;
     stefanus_tavilrond.inv.char_wpn[eq_wpn1] = &iron_sword;
     cout << stefanus_tavilrond.inv.char_wpn[eq_wpn1]->GetW_display_name() << endl;
