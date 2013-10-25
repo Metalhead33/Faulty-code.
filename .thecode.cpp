@@ -433,6 +433,31 @@ public:
     char_class *res = new char_class("None",false, false, false, 0, 0, 0, 0, 0, 0, true, true, true, true, false, true, false, false, true, false, true, true, true, false, false);
     return *res;
     };
+    string get_c_display_name() { return c_display_name; }
+    bool get_arcane_magic() { return arcane_magic; }
+    bool get_cleric_magic() { return cleric_magic; }
+    bool get_druid_magic() { return druid_magic; }
+    int get_req_str() { return requirement.atr_str; }
+    int get_req_int() { return requirement.atr_int; }
+    int get_req_wlp() { return requirement.atr_wlp; }
+    int get_req_agl() { return requirement.atr_agl; }
+    int get_req_dxt() { return requirement.atr_dxt; }
+    int get_req_chr() { return requirement.atr_chr; }
+    bool get_can_crude() { return can_use[crude]; }
+    bool get_can_bow() { return can_use[bow]; }
+    bool get_can_crossbow() { return can_use[crossbow]; }
+    bool get_can_short_blade() { return can_use[short_blade]; }
+    bool get_can_long_blade() { return can_use[long_blade]; }
+    bool get_can_axe() { return can_use[axe]; }
+    bool get_can_halberd() { return can_use[halberd]; }
+    bool get_can_hammer() { return can_use[hammer]; }
+    bool get_can_spear() { return can_use[spear]; }
+    bool get_can_special() { return can_use[special]; }
+    bool get_can_t_none() { return can_wear[t_none]; }
+    bool get_can_cloth() { return can_wear[cloth]; }
+    bool get_can_light_armour() { return can_wear[light_armour]; }
+    bool get_can_medium_armour() { return can_wear[medium_armour]; }
+    bool get_can_heavy_armour() { return can_wear[heavy_armour]; }
 };
 char_class c_dummy("None", false,  false,  false, 0, 0, 0, 0, 0, 0,  true,  true,  true,  true,  false,  true,  false,  false,  true,  false,  true,  true,  true,  false,  false);
 char_class c_warrior("Warrior", false,  false,  false, 11, 0, 0, 9, 0, 0,  true,  true,  true,  true, true,  true, true, true,  true, true,  true,  true,  true, true, true);
@@ -852,10 +877,12 @@ int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing, long_blade);
     chr stefanus_tavilrond("Stephanus Tavilrond", sr_human, sr_lich, sc_warrior, sc_priest, pc_knight, 1);
-    stefanus_tavilrond.race = &r_human;
-    stefanus_tavilrond.inv.char_wpn[eq_wpn1] = &iron_sword;
-    cout << stefanus_tavilrond.inv.char_wpn[eq_wpn1]->GetW_display_name() << endl;
     stefanus_tavilrond.default_attributes();
+    stefanus_tavilrond.inv.char_wpn[eq_wpn1] = &iron_sword;
+    cout << stefanus_tavilrond.GetName() << endl;
+    cout << "Race: " << stefanus_tavilrond.race->get_display_name() << endl;
+    cout << "Class: " << "Dual-class " << stefanus_tavilrond.class1->get_c_display_name() << "-" << stefanus_tavilrond.class2->get_c_display_name() << endl;
+    cout << "Equipped weapon: " <<stefanus_tavilrond.inv.char_wpn[eq_wpn1]->GetW_display_name() << endl;
     cout << stefanus_tavilrond.getCharisma() << endl;
     cout << "damnit" << endl;
     return 0;
