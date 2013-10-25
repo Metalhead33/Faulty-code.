@@ -64,6 +64,7 @@ enum a_type
     t_none = 1,
     cloth,
     light_armour,
+    medium_armour,
     heavy_armour
 };
 
@@ -371,7 +372,7 @@ private:
     bool can_wear[heavy_armour];
     attrib requirement;
 public:
-    char_class(string set_name, bool setmagic1, bool setmagic2, bool setmagic3, int setr_atr_str, int setr_atr_int, int setr_atr_wlp, int setr_atr_agl, int setr_atr_dxt, int setr_atr_chr, bool can_use_crude, bool can_use_bow, bool can_use_crossbow, bool can_use_short_blade, bool can_use_long_blade, bool can_use_axe, bool can_use_halberd, bool can_use_hammer, bool can_use_spear, bool can_use_special , bool can_wear_t_none, bool can_wear_cloth, bool can_wear_light_armour, bool can_wear_heavy_armour)
+    char_class(string set_name, bool setmagic1, bool setmagic2, bool setmagic3, int setr_atr_str, int setr_atr_int, int setr_atr_wlp, int setr_atr_agl, int setr_atr_dxt, int setr_atr_chr, bool can_use_crude, bool can_use_bow, bool can_use_crossbow, bool can_use_short_blade, bool can_use_long_blade, bool can_use_axe, bool can_use_halberd, bool can_use_hammer, bool can_use_spear, bool can_use_special , bool can_wear_t_none, bool can_wear_cloth, bool can_wear_light_armour, bool can_wear_medium_armour, bool can_wear_heavy_armour)
     {
         c_display_name = set_name;
         arcane_magic = setmagic1;
@@ -396,20 +397,21 @@ public:
         can_wear[t_none] = can_wear_t_none;
         can_wear[cloth] = can_wear_cloth;
         can_wear[light_armour] = can_wear_light_armour;
-        can_wear[heavy_armour] = can_wear_heavy_armour
+        can_wear[medium_armour] = can_wear_medium_armour;
+        can_wear[heavy_armour] = can_wear_heavy_armour;
     };
     char_class()
     {
         string set_name = "None";
         bool setmagic1 = false;
         bool setmagic2 = false;
-        setmagic3 = false;
-        setr_atr_str = 0;
-        setr_atr_int = 0;
-        setr_atr_wlp = 0;
-        setr_atr_agl = 0;
-        setr_atr_dxt = 0;
-        setr_atr_chr = 0;
+        bool setmagic3 = false;
+        int setr_atr_str = 0;
+        int setr_atr_int = 0;
+        int setr_atr_wlp = 0;
+        int setr_atr_agl = 0;
+        int setr_atr_dxt = 0;
+        int setr_atr_chr = 0;
         bool can_use_crude = true;
         bool can_use_bow = true;
         bool can_use_crossbow = true;
@@ -423,23 +425,31 @@ public:
         bool can_wear_t_none = true;
         bool can_wear_cloth = true;
         bool can_wear_light_armour = true;
+        bool can_wear_medium_armour = false;
         bool can_wear_heavy_armour = false;
     };
     static char_class GetNull()
     {
-    char_class *res = new char_class("None",false, false, false, 0, 0, 0, 0, 0, 0, true, true, true, true, false, true, false, false, true, false, true, true, true, false);
+    char_class *res = new char_class("None",false, false, false, 0, 0, 0, 0, 0, 0, true, true, true, true, false, true, false, false, true, false, true, true, true, false, false);
     return *res;
     };
 };
-char_class c_dummy("None",false, false, false, 0, 0, 0, 0, 0, 0, true, true, true, true, false, true, false, false, true, false, true, true, true, false);
+char_class c_dummy("None", false,  false,  false, 0, 0, 0, 0, 0, 0,  true,  true,  true,  true,  false,  true,  false,  false,  true,  false,  true,  true,  true,  false,  false);
+char_class c_warrior("Warrior", false,  false,  false, 11, 0, 0, 9, 0, 0,  true,  true,  true,  true, true,  true, true, true,  true, true,  true,  true,  true, true, true);
+char_class c_thief("Thief", false,  false,  false, 0, 0, 0, 12, 12, 0,  true,  true,  true,  true, true,  true, true, true,  true, true,  true,  true,  true, false, false);
+char_class c_cleric("Cleric", false, true,  false, 10, 10, 13, 0, 0, 10,  true, false, false, false, false, false, false, true, false, true,  true,  true,  true, true, false);
+char_class c_mage("Magician", true, false,  false, 0, 12, 12, 0, 0, 10,  true, false, true, true, false, true, false, true, false, true,  true,  true,  true, false, false);
+char_class c_druid("Druid", false, false, true, 0, 14, 12, 0, 0, 0,  true, true, false, false, false, false, false, false, false, true,  true,  true, false, false, false);
+
 
 enum char_class_setup
 {
-        c_none,
-        c_druid,
-        c_priest,
-        c_magician,
-        c_warrior
+        sc_none,
+        sc_druid,
+        sc_priest,
+        sc_magician,
+        sc_thief,
+        sc_warrior
 };
 
 
@@ -482,8 +492,6 @@ public:
 class chr{
 private:
     string display_name;
-    char_class class1;
-    char_class class2;
     pclass prestige_class;
     int lvl;
     attrib base_attrib;
@@ -502,8 +510,10 @@ private:
 public:
     race1* race;
     race2* sec_race;
+    char_class *class1;
+    char_class *class2;
     inventory inv;
-    chr(string setname, race1_setup setrace, race2_setup setrace2, char_class setclass1, char_class setclass2, pclass setpclass, int setlvl)
+    chr(string setname, race1_setup setrace, race2_setup setrace2, char_class_setup setclass1, char_class_setup setclass2, pclass setpclass, int setlvl)
     {
     display_name = setname;
     switch (setrace)
@@ -544,7 +554,7 @@ public:
         case sr_goblin:
             race = &r_goblin;
             break;
-    }
+    };
     switch (setrace2)
     {
         case sr_none:
@@ -574,9 +584,49 @@ public:
         case sr_weretiger:
             sec_race = &r_weretiger;
             break;
-    }
-    class1 = setclass1;
-    class2 = setclass2;
+    };
+    switch (setclass1)
+    {
+        case sc_none:
+            class1 = &c_dummy;
+            break;
+        case sc_warrior:
+            class1 = &c_warrior;
+            break;
+        case sc_magician:
+            class1 = &c_mage;
+            break;
+        case sc_priest:
+            class1 = &c_cleric;
+            break;
+        case sc_thief:
+            class1 = &c_thief;
+            break;
+        case sc_druid:
+            class1 = &c_druid;
+            break;
+        }
+    switch (setclass2)
+    {
+        case sc_none:
+            class2 = &c_dummy;
+            break;
+        case sc_warrior:
+            class2 = &c_warrior;
+            break;
+        case sc_magician:
+            class2 = &c_mage;
+            break;
+        case sc_priest:
+            class2 = &c_cleric;
+            break;
+        case sc_thief:
+            class2 = &c_thief;
+            break;
+        case sc_druid:
+            class2 = &c_druid;
+            break;
+        }
     prestige_class = setpclass;
     lvl = setlvl;
     alive = true;
@@ -668,10 +718,48 @@ public:
             sec_race = &r_weretiger;
             break;
     }; }
-    char_class getclass1() { return class1; }
-    void set_class1(char_class setclass1) { class1 = setclass1; }
-    char_class getclass2() { return class2; }
-    void set_class2(char_class setclass2) { class2 = setclass2; }
+    void set_class1(char_class_setup setclass1) { switch (setclass1)
+    {
+        case sc_none:
+            class1 = &c_dummy;
+            break;
+        case sc_warrior:
+            class1 = &c_warrior;
+            break;
+        case sc_magician:
+            class1 = &c_mage;
+            break;
+        case sc_priest:
+            class1 = &c_cleric;
+            break;
+        case sc_thief:
+            class1 = &c_thief;
+            break;
+        case sc_druid:
+            class1 = &c_druid;
+            break;
+        }; }
+    void set_class2(char_class_setup setclass2) { switch (setclass2)
+    {
+        case sc_none:
+            class2 = &c_dummy;
+            break;
+        case sc_warrior:
+            class2 = &c_warrior;
+            break;
+        case sc_magician:
+            class2 = &c_mage;
+            break;
+        case sc_priest:
+            class2 = &c_cleric;
+            break;
+        case sc_thief:
+            class2 = &c_thief;
+            break;
+        case sc_druid:
+            class2 = &c_druid;
+            break;
+        }; }
     pclass getpclass() { return prestige_class; }
     void set_pclass(pclass setpclass) { prestige_class = setpclass; }
     int getlvl() { return lvl; }
@@ -762,8 +850,8 @@ public:
 
 int main()
 {
-    wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing);
-    chr stefanus_tavilrond("Stephanus Tavilrond", sr_human, sr_lich, c_warrior, c_priest, pc_knight, 1);
+    wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing, long_blade);
+    chr stefanus_tavilrond("Stephanus Tavilrond", sr_human, sr_lich, sc_warrior, sc_priest, pc_knight, 1);
     stefanus_tavilrond.race = &r_human;
     stefanus_tavilrond.inv.char_wpn[eq_wpn1] = &iron_sword;
     cout << stefanus_tavilrond.inv.char_wpn[eq_wpn1]->GetW_display_name() << endl;
