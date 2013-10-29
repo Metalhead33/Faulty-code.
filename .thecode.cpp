@@ -1,5 +1,5 @@
 #include <iostream>
-#include <string>
+#include <fstream>
 #include <map>
 using namespace std;
 
@@ -132,6 +132,15 @@ public:
         wpn *res = new wpn("N\\A",0, 0, 0, 0, a_none, m_none, blunt, crude);
         return *res;
      };
+    void w_set_name(string w_setname) {w_display_name = w_setname; }
+    void w_set_min(int w_setmin) {w_minatk = w_setmin; }
+    void w_set_max(int w_setmax) {w_maxatk = w_setmax; }
+    void w_set_cond(int w_setcond) {w_cond = w_setcond; }
+    void w_set_cost(int w_setcost) {w_cost = w_setcost; }
+    void w_set_mat(material w_setmat) {w_mat = w_setmat; }
+    void w_set_elem(element w_setelem) {w_elem = w_setelem; }
+    void w_set_type(w_type w_settype) {w_usage = w_settype; }
+    void w_set_kind(w_type2 w_setkind) {w_kind = w_setkind; }
     string GetW_display_name() { return w_display_name; }
     float GetW_minatk() { return w_minatk; }
     float GetW_maxatk() { return w_maxatk; }
@@ -140,6 +149,7 @@ public:
     material GetW_mat() { return w_mat; }
     element GetW_elem() { return w_elem; }
     w_type getW_usage() { return w_usage; }
+    w_type2 getW_kind() { return w_kind; }
 };
 wpn w_dummy("N\\A",0, 0, 0, 0, a_none, m_none, blunt, crude);
 
@@ -278,22 +288,6 @@ race1 r_lizardman("Lizardman", 9, 19, 9, 19, 8, 18, 9, 19, 7, 17, 6, 16);
 race1 r_ogre("Ogre", 12, 22, 7, 17, 7, 17, 9, 19, 7, 17, 6, 16);
 race1 r_goblin("Goblin", 9, 19, 8, 18, 7, 17, 9, 19, 9, 19, 7, 17);
 
-enum race1_setup
-{
-    sr_dummy = 0,
-    sr_human,
-    sr_wood_elf,
-    sr_high_elf,
-    sr_dark_elf,
-    sr_orc,
-    sr_dwarf,
-    sr_gnome,
-    sr_halfling,
-    sr_lizardman,
-    sr_ogre,
-    sr_goblin
-    };
-
 class race2
 {
 private:
@@ -347,19 +341,6 @@ race2 r_werelion("Werelion", 5, 0, 0, 0, 3, 0);
 race2 r_wereboar("Wereboar", 8, 0, 0, 0, -1, 0);
 race2 r_weretiger("Weretiger", 5, 0, 0, 1, 2, 0);
 race2 r_wererat("Wererat", 1, 3, 1, 0, 3, -1);
-
-enum race2_setup
-{
-        sr_none,
-        sr_vampire,
-        sr_lich,
-        sr_werewolf,
-        sr_werelion,
-        sr_werebear,
-        sr_wereboar,
-        sr_weretiger,
-        sr_wererat
-};
 
 class char_class
 {
@@ -466,29 +447,98 @@ char_class c_cleric("Cleric", false, true,  false, 10, 10, 13, 0, 0, 10,  true, 
 char_class c_mage("Magician", true, false,  false, 0, 12, 12, 0, 0, 10,  true, false, true, true, false, true, false, true, false, true,  true,  true,  true, false, false);
 char_class c_druid("Druid", false, false, true, 0, 14, 12, 0, 0, 0,  true, true, false, false, false, false, false, false, false, true,  true,  true, false, false, false);
 
-
-enum char_class_setup
+class prestige_class
 {
-        sc_none,
-        sc_druid,
-        sc_priest,
-        sc_magician,
-        sc_thief,
-        sc_warrior
+private:
+    string pc_display_name;
+    bool free_variation;
+    bool arcane_magic;
+    bool cleric_magic;
+    bool druid_magic;
+    bool can_use[special];
+    bool can_wear[heavy_armour];
+public:
+    char_class *required_class1;
+    char_class *required_class2;
+    prestige_class(string set_name, char_class *setreq1, char_class *setreq2, bool set_free_variation, bool setmagic1, bool setmagic2, bool setmagic3, bool can_use_crude, bool can_use_bow, bool can_use_crossbow, bool can_use_short_blade, bool can_use_long_blade, bool can_use_axe, bool can_use_halberd, bool can_use_hammer, bool can_use_spear, bool can_use_special , bool can_wear_t_none, bool can_wear_cloth, bool can_wear_light_armour, bool can_wear_medium_armour, bool can_wear_heavy_armour)
+    {
+        pc_display_name = set_name;
+        free_variation = set_free_variation;
+        required_class1 = setreq1;
+        required_class2 = setreq2;
+        arcane_magic = setmagic1;
+        cleric_magic = setmagic2;
+        druid_magic = setmagic3;
+        can_use[crude] = can_use_crude;
+        can_use[bow] = can_use_bow;
+        can_use[crossbow] = can_use_crossbow;
+        can_use[short_blade] = can_use_short_blade;
+        can_use[long_blade] = can_use_long_blade;
+        can_use[axe] = can_use_axe;
+        can_use[halberd] = can_use_halberd;
+        can_use[hammer] = can_use_hammer;
+        can_use[spear] = can_use_spear;
+        can_use[special] = can_use_special;
+        can_wear[t_none] = can_wear_t_none;
+        can_wear[cloth] = can_wear_cloth;
+        can_wear[light_armour] = can_wear_light_armour;
+        can_wear[medium_armour] = can_wear_medium_armour;
+        can_wear[heavy_armour] = can_wear_heavy_armour;
+    };
+    prestige_class()
+    {
+        string set_name = "None";
+        char_class setreq1 = c_dummy;
+        char_class setreq2 = c_dummy;
+        bool set_free_variation = true;
+        bool setmagic1 = false;
+        bool setmagic2 = false;
+        bool setmagic3 = false;
+        bool can_use_crude = true;
+        bool can_use_bow = true;
+        bool can_use_crossbow = true;
+        bool can_use_short_blade = true;
+        bool can_use_long_blade = false;
+        bool can_use_axe = true;
+        bool can_use_halberd = false;
+        bool can_use_hammer = false;
+        bool can_use_spear = true;
+        bool can_use_special = false;
+        bool can_wear_t_none = true;
+        bool can_wear_cloth = true;
+        bool can_wear_light_armour = true;
+        bool can_wear_medium_armour = false;
+        bool can_wear_heavy_armour = false;
+    };
+    static prestige_class GetNull()
+    {
+    prestige_class *res = new prestige_class("None", &c_dummy, &c_dummy, true, false, false, false, true, true, true, true, false, true, false, false, true, false, true, true, true, false, false);
+    return *res;
+    };
+    string get_c_display_name() { return pc_display_name; }
+    bool get_free_variaton() { return free_variation; }
+    bool get_arcane_magic() { return arcane_magic; }
+    bool get_cleric_magic() { return cleric_magic; }
+    bool get_druid_magic() { return druid_magic; }
+    bool get_can_crude() { return can_use[crude]; }
+    bool get_can_bow() { return can_use[bow]; }
+    bool get_can_crossbow() { return can_use[crossbow]; }
+    bool get_can_short_blade() { return can_use[short_blade]; }
+    bool get_can_long_blade() { return can_use[long_blade]; }
+    bool get_can_axe() { return can_use[axe]; }
+    bool get_can_halberd() { return can_use[halberd]; }
+    bool get_can_hammer() { return can_use[hammer]; }
+    bool get_can_spear() { return can_use[spear]; }
+    bool get_can_special() { return can_use[special]; }
+    bool get_can_t_none() { return can_wear[t_none]; }
+    bool get_can_cloth() { return can_wear[cloth]; }
+    bool get_can_light_armour() { return can_wear[light_armour]; }
+    bool get_can_medium_armour() { return can_wear[medium_armour]; }
+    bool get_can_heavy_armour() { return can_wear[heavy_armour]; }
 };
+prestige_class pc_dummy("None", &c_dummy, &c_dummy, true, false, false, false, true, true, true, true, false, true, false, false, true, false, true, true, true, false, false);
+prestige_class pc_knight("Knight", &c_warrior, &c_cleric, false, false, false, false, true, true, true, true, false, true, false, false, true, false, true, true, true, false, false);
 
-
-enum pclass
-{
-        pc_none,
-        pc_knight,
-        pc_dknight,
-        pc_ranger,
-        pc_assassin,
-        pc_inquisitor,
-        pc_necromancer,
-        pc_headhunter
-};
 
 
 class inventory{
@@ -511,13 +561,27 @@ public:
         char_armour[eq_arrow] = &a_dummy;
         char_armour[eq_neck] = &a_dummy;
         };
+        ~inventory(){
+        delete[] char_wpn[eq_wpn1];
+        delete[] char_wpn[eq_wpn2];
+        delete[] char_armour[eq_shld];
+        delete[] char_armour[eq_hlm];
+        delete[] char_armour[eq_clth1];
+        delete[] char_armour[eq_clth2];
+        delete[] char_armour[eq_ndrwr];
+        delete[] char_armour[eq_arm_tors];
+        delete[] char_armour[eq_arm_lgs];
+        delete[] char_armour[eq_boots];
+        delete[] char_armour[eq_ggntlet];
+        delete[] char_armour[eq_clk];
+        delete[] char_armour[eq_arrow];
+        delete[] char_armour[eq_neck];}
 };
 
 
 class chr{
 private:
     string display_name;
-    pclass prestige_class;
     int lvl;
     attrib base_attrib;
     attrib mod_attrib;
@@ -537,122 +601,16 @@ public:
     race2* sec_race;
     char_class *class1;
     char_class *class2;
+    prestige_class *pclass;
     inventory inv;
-    chr(string setname, race1_setup setrace, race2_setup setrace2, char_class_setup setclass1, char_class_setup setclass2, pclass setpclass, int setlvl)
+    chr(string setname, race1 *setrace, race2 *setrace2, char_class *setclass1, char_class *setclass2, prestige_class *setpclass, int setlvl)
     {
     display_name = setname;
-    switch (setrace)
-    {
-        case sr_dummy:
-            race = &r_dummy;
-            break;
-        case sr_human:
-            race = &r_human;
-            break;
-        case sr_wood_elf:
-            race = &r_wood_elf;
-            break;
-        case sr_high_elf:
-            race = &r_high_elf;
-            break;
-        case sr_dark_elf:
-            race = &r_dark_elf;
-            break;
-        case sr_orc:
-            race = &r_orc;
-            break;
-        case sr_dwarf:
-            race = &r_dwarf;
-            break;
-        case sr_gnome:
-            race = &r_gnome;
-            break;
-        case sr_halfling:
-            race = &r_halfling;
-            break;
-        case sr_lizardman:
-            race = &r_lizardman;
-            break;
-        case sr_ogre:
-            race = &r_ogre;
-            break;
-        case sr_goblin:
-            race = &r_goblin;
-            break;
-    };
-    switch (setrace2)
-    {
-        case sr_none:
-            sec_race = &r_none;
-            break;
-        case sr_vampire:
-            sec_race = &r_vampire;
-            break;
-        case sr_lich:
-            sec_race = &r_lich;
-            break;
-        case sr_werewolf:
-            sec_race = &r_werewolf;
-            break;
-        case sr_werebear:
-            sec_race = &r_werebear;
-            break;
-        case sr_wereboar:
-            sec_race = &r_wereboar;
-            break;
-        case sr_werelion:
-            sec_race = &r_werelion;
-            break;
-        case sr_wererat:
-            sec_race = &r_wererat;
-            break;
-        case sr_weretiger:
-            sec_race = &r_weretiger;
-            break;
-    };
-    switch (setclass1)
-    {
-        case sc_none:
-            class1 = &c_dummy;
-            break;
-        case sc_warrior:
-            class1 = &c_warrior;
-            break;
-        case sc_magician:
-            class1 = &c_mage;
-            break;
-        case sc_priest:
-            class1 = &c_cleric;
-            break;
-        case sc_thief:
-            class1 = &c_thief;
-            break;
-        case sc_druid:
-            class1 = &c_druid;
-            break;
-        }
-    switch (setclass2)
-    {
-        case sc_none:
-            class2 = &c_dummy;
-            break;
-        case sc_warrior:
-            class2 = &c_warrior;
-            break;
-        case sc_magician:
-            class2 = &c_mage;
-            break;
-        case sc_priest:
-            class2 = &c_cleric;
-            break;
-        case sc_thief:
-            class2 = &c_thief;
-            break;
-        case sc_druid:
-            class2 = &c_druid;
-            break;
-        }
-    prestige_class = setpclass;
+    race = setrace;
+    sec_race = setrace2;
+    class1 = setclass1;
+    class2 = setclass2;
+    pclass = setpclass;
     lvl = setlvl;
     alive = true;
     mhp = 0.00;
@@ -673,120 +631,11 @@ public:
     };
     string GetName() { return display_name; }
     void set_name(string set_name) { display_name = set_name; }
-    void set_race2(race1_setup setrace)
-    { switch (setrace)
-    {
-        case sr_dummy:
-            race = &r_dummy;
-            break;
-        case sr_human:
-            race = &r_human;
-            break;
-        case sr_wood_elf:
-            race = &r_wood_elf;
-            break;
-        case sr_high_elf:
-            race = &r_high_elf;
-            break;
-        case sr_dark_elf:
-            race = &r_dark_elf;
-            break;
-        case sr_orc:
-            race = &r_orc;
-            break;
-        case sr_dwarf:
-            race = &r_dwarf;
-            break;
-        case sr_gnome:
-            race = &r_gnome;
-            break;
-        case sr_halfling:
-            race = &r_halfling;
-            break;
-        case sr_lizardman:
-            race = &r_lizardman;
-            break;
-        case sr_ogre:
-            race = &r_ogre;
-            break;
-        case sr_goblin:
-            race = &r_goblin;
-            break;
-    }; }
-    void set_race2(race2_setup setrace2) { switch (setrace2)
-    {
-        case sr_none:
-            sec_race = &r_none;
-            break;
-        case sr_vampire:
-            sec_race = &r_vampire;
-            break;
-        case sr_lich:
-            sec_race = &r_lich;
-            break;
-        case sr_werewolf:
-            sec_race = &r_werewolf;
-            break;
-        case sr_werebear:
-            sec_race = &r_werebear;
-            break;
-        case sr_wereboar:
-            sec_race = &r_wereboar;
-            break;
-        case sr_werelion:
-            sec_race = &r_werelion;
-            break;
-        case sr_wererat:
-            sec_race = &r_wererat;
-            break;
-        case sr_weretiger:
-            sec_race = &r_weretiger;
-            break;
-    }; }
-    void set_class1(char_class_setup setclass1) { switch (setclass1)
-    {
-        case sc_none:
-            class1 = &c_dummy;
-            break;
-        case sc_warrior:
-            class1 = &c_warrior;
-            break;
-        case sc_magician:
-            class1 = &c_mage;
-            break;
-        case sc_priest:
-            class1 = &c_cleric;
-            break;
-        case sc_thief:
-            class1 = &c_thief;
-            break;
-        case sc_druid:
-            class1 = &c_druid;
-            break;
-        }; }
-    void set_class2(char_class_setup setclass2) { switch (setclass2)
-    {
-        case sc_none:
-            class2 = &c_dummy;
-            break;
-        case sc_warrior:
-            class2 = &c_warrior;
-            break;
-        case sc_magician:
-            class2 = &c_mage;
-            break;
-        case sc_priest:
-            class2 = &c_cleric;
-            break;
-        case sc_thief:
-            class2 = &c_thief;
-            break;
-        case sc_druid:
-            class2 = &c_druid;
-            break;
-        }; }
-    pclass getpclass() { return prestige_class; }
-    void set_pclass(pclass setpclass) { prestige_class = setpclass; }
+    void set_race1(race1 *setrace) { race = setrace;}
+    void set_race2(race2 *setrace2) { sec_race = setrace2;}
+    void set_class1(char_class *setclass1) { class1 = setclass1;}
+    void set_class2(char_class *setclass2) { class2 = setclass2;}
+    void set_pc(prestige_class *setpc){pclass = setpc;}
     int getlvl() { return lvl; }
     void set_lvl(int setlvl) { lvl = setlvl; }
     bool get_alive() { return alive; }
@@ -871,17 +720,78 @@ public:
     int getAgility() { return (get_bagl() + get_magl());}
     int getDexterity() { return (get_bdxt() + get_mdxt());}
     int getCharisma() { return (get_bchr() + get_mchr());}
+    ~chr()
+    {
+        delete[] race;
+        delete[] sec_race;
+        delete[] class1;
+        delete[] class2;
+        };
 };
+
+void Promote(chr *character, prestige_class *classis)
+{
+    if (classis->get_free_variaton()){
+    bool requirements_meet[2];
+if (character->class1 == classis->required_class1)
+    requirements_meet[0] = true;
+else
+    requirements_meet[0] = false;
+if (character->class2 == classis->required_class1)
+    requirements_meet[1] = true;
+    else
+        requirements_meet[1] = false;
+if (requirements_meet[0]||requirements_meet[1])
+        character->set_pc(classis);
+        else
+            cerr << character->GetName() << "is not qualified to be a. " << classis->get_c_display_name() << "." << endl;}
+        else{
+    bool requirements_meet[2];
+    bool requirements_meet2[2];
+    bool arch_requirements_meet[2];
+if (character->class1 == classis->required_class1)
+    requirements_meet[0] = true;
+else
+    requirements_meet[0] = false;
+if (character->class2 == classis->required_class1)
+    requirements_meet[1] = true;
+else
+    requirements_meet[1] = false;
+if (character->class1 == classis->required_class2)
+    requirements_meet2[0] = true;
+else
+    requirements_meet2[0] = false;
+if (character->class2 == classis->required_class2)
+    requirements_meet2[1] = true;
+else
+    requirements_meet2[1] = false;
+if (requirements_meet[0]||requirements_meet[1])
+        arch_requirements_meet[0] = true;
+        else
+        arch_requirements_meet[0] = false;
+if (requirements_meet2[0]||requirements_meet2[1])
+        arch_requirements_meet[1] = true;
+        else
+        arch_requirements_meet[1] = false;
+if (arch_requirements_meet[0]&&arch_requirements_meet[1])
+        character->set_pc(classis);
+        else
+            cerr << character->GetName() << "is not qualified to be a. " << classis->get_c_display_name() << "." << endl;;}}
+
+
+
 
 int main()
 {
     wpn iron_sword("Iron Sword", 1, 8, 100, 75, a_iron, m_none, slashing, long_blade);
-    chr stefanus_tavilrond("Stephanus Tavilrond", sr_human, sr_lich, sc_warrior, sc_priest, pc_knight, 1);
+    chr stefanus_tavilrond("Stephanus Tavilrond", &r_human, &r_lich, &c_warrior, &c_cleric, &pc_dummy, 1);
+    Promote(&stefanus_tavilrond, &pc_knight);
     stefanus_tavilrond.default_attributes();
     stefanus_tavilrond.inv.char_wpn[eq_wpn1] = &iron_sword;
     cout << stefanus_tavilrond.GetName() << endl;
     cout << "Race: " << stefanus_tavilrond.race->get_display_name() << endl;
     cout << "Class: " << "Dual-class " << stefanus_tavilrond.class1->get_c_display_name() << "-" << stefanus_tavilrond.class2->get_c_display_name() << endl;
+    cout << "Prestige class: " << stefanus_tavilrond.pclass->get_c_display_name() << endl;
     cout << "Equipped weapon: " <<stefanus_tavilrond.inv.char_wpn[eq_wpn1]->GetW_display_name() << endl;
     cout << stefanus_tavilrond.getCharisma() << endl;
     cout << "damnit" << endl;
